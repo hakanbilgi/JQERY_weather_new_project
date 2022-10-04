@@ -10,7 +10,7 @@ const listJQ = $(".cities").eq(0);
 //console.log(formJquery);
 //console.log(inputJQ);
 
-// get(index) ==> toArray(get()) , eq(index) 
+// get(index) ==> toArray(get()) , eq(index)
 
 //load VS DOMContentLoaded
 //DOMContentLoaded ==> means page rendered, DOM is ready
@@ -19,8 +19,8 @@ const listJQ = $(".cities").eq(0);
 //window.onload = () =>{} ===> JS
 // addEventListener ===> on
 
-$(window).on("load", ()=>{
-    console.log("window.load");
+$(window).on("load", () => {
+  console.log("window.load");
 });
 
 // document.addEventListener("DOMContentLoaded", ()=>{}) ==> JS
@@ -29,8 +29,12 @@ $(window).on("load", ()=>{
 //     console.log("DOMContentLoaded");
 // });
 
-$(document).ready(()=>{
-    console.log("DOMContentLoaded");
+$(document).ready(() => {
+  console.log("DOMContentLoaded");
+  localStorage.setItem(
+    "apiKey",
+    EncryptStringAES("4d8fb5b93d4af21d66a2948710284366")
+  );
 });
 
 // formJquery.on("submit", (e)=>{
@@ -38,44 +42,67 @@ $(document).ready(()=>{
 //     getWeatherDataFromApi();
 // });
 
-formJquery.submit((e)=>{
-    e.preventDefault();
-    getWeatherDataFromApi();
+formJquery.submit((e) => {
+  e.preventDefault();
+  getWeatherDataFromApi();
 });
 
+const getWeatherDataFromApi = async () => {
+  //console.log("AJAX Func. is called");
+  const apiKey = DecryptStringAES(localStorage.getItem("apiKey"));
+  //JS .value == jQUERY .val()
+  const cityName = inputJQ.val();
+  console.log(cityName);
+  const units = "metric";
+  const lang = "tr";
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=${units}&lang=${lang}`;
 
-const getWeatherDataFromApi = () =>{
-    console.log("AJAX Func. is called");
-}
+  // XMLHttpRequest(xhr) vs. fetch() vs. axios vs. $.ajax
 
-// XMLHTTPREQUEST(xhr) vs. fetch() vs. axios vs. $.ajax
+  $.ajax({
+    type: "GET",
+    url: url,
+    dataType: "json",
+    success: (response) => {
+      //main body func.
+      console.log(response);
+      const { main, sys, name, weather } = response;
+      const iconUrlAWS = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${weather[0].icon}.svg`;
+      //alternative iconUrl
+      const iconUrl = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
 
+      //js=>document.createElement("li")
 
+      // const createdLi2 = $(document.createElement("li"))
 
-    $.ajax({
-      type: "GET",
-      url: url,
-      dataType: "json",
-      success: (response) => {},
-      beforeSend: (request) => {},
-      complete: () => {},
-      error: (XMLHttpRequest) => {},
-    });
+      //weather card control!!
 
+      const createdLi = $("<li></li>");
+      createdLi.addClass("city");
+      createdLi.html(`
+            <h2 class="city-name" data-name="${name}, ${sys.country}">
+                <span>${name}</span>
+                <sup>${sys.country}</sup>
+            </h2>
+            <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup></div>
+            <figure>
+                <img class="city-icon" src="${iconUrl}">
+                <figcaption>${weather[0].description}</figcaption>
+            </figure>`);
 
-
- const iconUrlAWS = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${weather[0].icon}.svg`;
- //alternative iconUrl
- const iconUrl = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
-
-
- `
-        <h2 class="city-name" data-name="${name}, ${sys.country}">
-            <span>${name}</span>
-            <sup>${sys.country}</sup>
-        </h2>
-        <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup></div>
-        <figure>
-            <img class="city-icon" src="${iconUrl}">
-            <figcaption>${weather[0].description}</figcaption>
-        </figure>`;
+      //append vs. prepend both in JS AND JQUERY
+      listJQ.prepend(createdLi);
+      //formJS.reset();
+      formJquery.trigger("reset");
+    },
+    beforeSend: (request) => {
+      console.log("before ajax send");
+    },
+    complete: () => {
+      console.log("after ajax send");
+    },
+    error: (XMLHttpRequest) => {
+      console.log(XMLHttpRequest);
+    },
+  });
+};
