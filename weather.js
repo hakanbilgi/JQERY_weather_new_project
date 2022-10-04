@@ -10,7 +10,7 @@ const listJQ = $(".cities").eq(0);
 //console.log(formJquery);
 //console.log(inputJQ);
 
-// get(index) ==> toArray(get()) , eq(index)
+// get(index) ==> toArray(get()) , eq(index) 
 
 //load VS DOMContentLoaded
 //DOMContentLoaded ==> means page rendered, DOM is ready
@@ -19,8 +19,8 @@ const listJQ = $(".cities").eq(0);
 //window.onload = () =>{} ===> JS
 // addEventListener ===> on
 
-$(window).on("load", () => {
-  console.log("window.load");
+$(window).on("load", ()=>{
+    console.log("window.load");
 });
 
 // document.addEventListener("DOMContentLoaded", ()=>{}) ==> JS
@@ -29,8 +29,8 @@ $(window).on("load", () => {
 //     console.log("DOMContentLoaded");
 // });
 
-$(document).ready(() => {
-  console.log("DOMContentLoaded");
+$(document).ready(()=>{
+    console.log("DOMContentLoaded");
 });
 
 // formJquery.on("submit", (e)=>{
@@ -38,13 +38,22 @@ $(document).ready(() => {
 //     getWeatherDataFromApi();
 // });
 
-formJquery.submit((e) => {
-  e.preventDefault();
-  getWeatherDataFromApi();
+formJquery.submit((e)=>{
+    e.preventDefault();
+    getWeatherDataFromApi();
 });
 
-const getWeatherDataFromApi = () => {
-  console.log("AJAX Func. is called");
-};
+
+const getWeatherDataFromApi = () =>{
+    console.log("AJAX Func. is called");
+}
 
 // XMLHTTPREQUEST(xhr) vs. fetch() vs. axios vs. $.ajax
+
+
+
+
+
+
+
+
