@@ -67,3 +67,15 @@ const getWeatherDataFromApi = () =>{
  const iconUrlAWS = `https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/${weather[0].icon}.svg`;
  //alternative iconUrl
  const iconUrl = `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`;
+
+
+ `
+        <h2 class="city-name" data-name="${name}, ${sys.country}">
+            <span>${name}</span>
+            <sup>${sys.country}</sup>
+        </h2>
+        <div class="city-temp">${Math.round(main.temp)}<sup>°C</sup></div>
+        <figure>
+            <img class="city-icon" src="${iconUrl}">
+            <figcaption>${weather[0].description}</figcaption>
+        </figure>`;
