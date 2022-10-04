@@ -52,7 +52,15 @@ const getWeatherDataFromApi = () =>{
 
 
 
-
+    $.ajax({
+      type: "GET",
+      url: url,
+      dataType: "json",
+      success: (response) => {},
+      beforeSend: (request) => {},
+      complete: () => {},
+      error: (XMLHttpRequest) => {},
+    });
 
 
 
